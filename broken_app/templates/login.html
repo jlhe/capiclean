@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/style.css') }}">
+<link rel="icon" href="static/images/favicon.png" type="image/png" />
+<style>
+	.username-form {
+		margin-top: 20px;
+	}
+	.password-form {
+		margin-top: 20px;
+	}
+
+	.username-form input[type="text"] {
+		height: 40px;
+		width: 300px;
+		padding: 5px 10px;
+		border-radius: 5px;
+		border: none;
+		font-size: 18px;
+		margin-right: 10px;
+	}
+	.password-form input[type="password"] {
+		height: 40px;
+		width: 300px;
+		padding: 5px 10px;
+		border-radius: 5px;
+		border: none;
+		font-size: 18px;
+		margin-right: 10px;
+	}
+
+	.login-form input[type="submit"] {
+		height: 40px;
+		width: 100px;
+		background-color: #3B5998;
+		color: #fff;
+		font-size: 18px;
+		font-weight: bold;
+		border: none;
+		border-radius: 5px;
+		cursor: pointer;
+	}
+</style>
+<div class="header_section">
+	<div class="container-fluid">
+        <div class="row">
+          <div class="col-md-3">
+            <div class="logo"><a href="/"><img src="{{ url_for('static', filename='images/logo.png') }}"></a></div>
+          	            <div class="menu_text">
+            	<h1>Login</h1>
+		{% if error %}
+		<div style="color:red">Incorrect username or password!</div>
+		{% endif %}
+					<div class="login-form">
+					    <form method="post" action="/login">
+							<div class="username-form">
+					        
+					        <input type="text" id="username" name="username" placeholder="username" required><br>
+							</div>
+							<div class="password-form">
+					        
+					        <input type="password" id="password" name="password" placeholder="password" required><br><br>
+							</div>
+					        <input type="submit" value="Login">
+					    </form>
+					</div>
+          </div>
+          <div class="col-sm-5">
+            <div><img src="{{ url_for('static', filename='images/img-1.png') }}"></div>
+          </div>
+          <div class="col-md-1">
+            <div class="menu_text">
+				<div class="col-sm-5">
+              <ul>
+                <div class="togle_3">
+
+					<head>
+					    <meta charset="UTF-8">
+					    <title>Login</title>
+					</head>
+					<body>
+						<body style="background-color: #addaed;">
+					    
+					</body>
+				</div>
+			</ul>
+		</div>
+	</div>
+</div>
+</html>

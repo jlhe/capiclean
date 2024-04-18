@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
+<link rel="icon" href="static/images/favicon.png" type="image/png" />
+<form action="{{ url_for('InvoiceGenerator' %}" method="POST">
+  <style>
+    .generate-form input[type="submit"] {
+      height: 40px;
+      width: 140px;
+      background-color: #3B5998;
+      color: #fff;
+      font-size: 18px;
+      font-weight: bold;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+  </style>
+<div class="header_section">
+    <div class="container-fluid">
+        <div class="row">
+          <div class="col-md-3">
+            <div class="logo"><a href="/"><img src="{% static 'images/logo.png' %}"></a></div>
+                        <div class="menu_text">
+                <h1>Generate Invoice</h1>
+                <td class="service">
+                    <select name="selected_service" id="selected_service" name="selected_service">
+                      {% for service in services %}
+                      <option value="{{ service }}">{{ service }}</option>
+                      {% endfor %}
+                    </select></td>
+                    <td class="qty"><input type="text" name="qty" maxlength="4" size="4" placeholder="qty"></td><br>
+                    <input type="text" name="project" id="project-name" placeholder="PROJECT"> <br>
+                    <input type="text" name="client" id="client-name" placeholder="CLIENT"> <br>
+                    <input type="text" name="address" id="address-name" placeholder="ADDRESS"> <br>
+                    <input type="email" name="email-address" id="email-adress" placeholder="EMAIL"><br><br>
+                    <div class="generate-form">
+                      <input type="submit" value="Generate">
+                
+                  </div>
+                
+          </div>
+          <div class="col-sm-5">
+            <div><img src="{% static 'images/img-1.png' %}"></div>
+          </div>
+          <div class="col-md-1">
+            <div class="menu_text">
+                <div class="col-sm-5">
+              <ul>
+                <div class="togle_3">
+
+                    <head>
+                        <meta charset="UTF-8">
+                        <title>Generate Invoice</title>
+                    </head>
+                    <body>
+                        <body style="background-color: #addaed;">
+                        
+                    </body>
+                </div>
+            </ul>
+        </div>
+    </div>
+</div>
+</html>

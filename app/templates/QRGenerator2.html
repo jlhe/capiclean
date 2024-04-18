@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
+<link rel="icon" href="static/images/favicon.png" type="image/png" />
+<form action="{{ url_for('QRGenerator' %}" method="POST">
+    <style>
+        .generate-form input[type="submit"] {
+            height: 40px;
+            width: 140px;
+            background-color: #3B5998;
+            color: #fff;
+            font-size: 18px;
+            font-weight: bold;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .qr-link {
+            position: absolute;
+            left: 1000px;
+            top: 300px;
+        }
+    </style>
+    <div class="header_section">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-3">
+                    <div class="logo"><a href="/"><img src="{% static 'images/logo.png' %}"></a></div>
+                    <div class="menu_text">
+                        <h1>Generate QR</h1>
+                        
+                        <input type="text" name="invoice_id" id="invoice_id" placeholder="invoice-id"><br><br>
+                        <div class="generate-form">
+                            <input type="submit" value="Generate">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-5">
+                    <div><img src="{% static 'images/img-1.png' %}"></div>
+                </div>
+                <div class="col-md-1">
+                    <div class="menu_text">
+                        <div class="col-sm-5">
+                            <ul>
+                                <div class="togle_3">
+                                    <head>
+                                        <meta charset="UTF-8">
+                                        <title>Generate QR</title>
+                                    </head>
+                                    <body>
+                                        <body style="background-color: #addaed;">
+                                    </body>
+                                </div>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</html>
+
+{% if png_link %}
+<div class="qr-link">
+    <p>QR Code Link: <a href="{{ png_link }}" target="_blank">{{ png_link }}</a></p>
+    <h4>Insert QR Link to generate Scannable Invoice: </h4>
+    <form action="{{ url_for('QRGenerator' %}" method="POST">
+        <!-- Add a hidden field to differentiate the two forms -->
+        <input type="hidden" name="form_type" id="scannable_invoice_form_type" value="scannable_invoice">
+        <input type="text" name="qr_link" id="qr_link" placeholder="qr-link"><br><br>
+        <div class="generate-form">
+            <input type="submit" value="submit">
+        </div>
+    </form>
+</div>
+{% endif %}
