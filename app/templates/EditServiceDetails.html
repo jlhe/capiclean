@@ -16,6 +16,7 @@
 	cursor: pointer;
 }
 </style>
+
 <div class="header_section">
     <div class="container-fluid">
         <div class="row">
@@ -23,18 +24,25 @@
             <div class="logo"><a href="/"><img src="{% static 'images/logo.png' %}"></a></div>
                         <div class="menu_text">
                   <h1>Edit Service Details</h1>
+                  {% if messages %}
+                    {% for message in messages %}
+                      <div class="alert alert-danger" role="alert">
+                          {{ message }}
+                      </div>
+                    {% endfor %}
+                  {% endif %}
                   <form method="POST">
                     {% csrf_token %}
-                    <label for="id_service_name">Service name:</label>
+                    <label name="service_name">Service name:</label>
                     {{ form.service_name }}
                     <br>
-                    <label for="id_service_description">Service description:</label>
+                    <label name="service_description">Service description:</label>
                     {{ form.service_description }}
                     <br>
-                    <label for="id_service_price">Service price:</label>
+                    <label name="service_price">Service price:</label>
                     {{ form.service_price }}
                     <br>
-                    <label for="id_service_qty">Service quantity:</label>
+                    <label name="service_qty">Service quantity:</label>
                     {{ form.service_qty }}
                     <br>
                     <button type="submit">Save</button>

@@ -8,7 +8,12 @@ class EditServicesForm(forms.ModelForm):
     class Meta:
             model = services
             fields = ['service_name', 'service_description', 'service_price', 'service_qty']
-
+    labels = {
+        "service_name":  "Service Name",
+        "service_description": "Service Description",
+        "service_price": "Service Price",
+        "service_qty": "Service qty",
+    }
 class LoginForm(forms.Form):
     username = forms.CharField()
     password = forms.CharField(widget=forms.PasswordInput)
