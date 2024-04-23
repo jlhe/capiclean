@@ -13,13 +13,12 @@ from django.contrib import messages
 def sanitizar_input(input_data):
     try:
         decoded_data = base64.b64decode(input_data).decode('utf-8')
-        if 'script' in decoded_data.lower() or 'alert' in decoded_data.lower():
-            raise ValueError("Error en el input de datos")
+        for keyword in ['script', 'alert', 'x28', 'x29']:
+            if keyword in decoded_data.lower():
+                raise ValueError("Error en el input de datos: contiene palabras clave no deseadas.")
         return decoded_data
-    except base64.binascii.Error:
+    except (base64.binascii.Error, UnicodeDecodeError):
         return input_data
-    except ValueError as e:
-        raise ValueError(str(e))
 
 # Create your views here.
 def index(request):
@@ -60,28 +59,32 @@ def editservices(request):
 
 def edit_service_details(request, pk):
     # Verificar si el usuario está autenticado y es un administrador
+    # Verificar si el usuario está autenticado y es un administrador
     if request.user.is_authenticated:
         servicio = get_object_or_404(services, service_id=pk)
-        if request.method == 'GET':
-            form = EditServicesForm(instance=servicio)
-        elif request.method == 'POST':
-            form = EditServicesForm(request.POST)
+        # if request.method == 'GET':
+        #     form = EditServicesForm(instance=servicio)
+        if request.method == 'POST':
+            form = EditServicesForm(request.POST, instance=servicio)
             if form.is_valid():
-                datos = form.cleaned_data
                 try:
+                    datos = form.cleaned_data
                     service_price = datos["service_price"]
                     service_qty = datos["service_qty"]
                     service_name_clean = sanitizar_input(datos["service_name"])
                     service_description_clean = sanitizar_input(datos["service_description"])
-                    form = EditServicesForm(data={'service_name':service_name_clean, 
-                                                'service_description': service_description_clean, 
-                                                'service_price': service_price,
-                                                'service_qty': service_qty}, instance=servicio)
+                    servicio.service_name = service_name_clean
+                    servicio.service_description = service_description_clean
+                    servicio.service_price = service_price
+                    servicio.service_qty = service_qty
+                    servicio.save()
+                    return redirect('List Services')
                 except ValueError as e:
-                    messages.error(request, "Datos invalidos")
-                form.save()
-                return redirect('List Services')
+                    messages.error(request, "Datos inválidos: " + str(e))
             # Si el formulario no es válido, se renderiza nuevamente la página con el formulario y los errores
+        else:
+            form = EditServicesForm(instance=servicio)
+            # Si el método de solicitud no es POST, se crea un formulario vacío con los datos del servicio
         return render(request, 'EditServiceDetails.html', {'form': form})
     else:
         return redirect('index')

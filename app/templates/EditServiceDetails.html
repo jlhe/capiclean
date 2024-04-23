@@ -24,13 +24,7 @@
             <div class="logo"><a href="/"><img src="{% static 'images/logo.png' %}"></a></div>
                         <div class="menu_text">
                   <h1>Edit Service Details</h1>
-                  {% if messages %}
-                    {% for message in messages %}
-                      <div class="alert alert-danger" role="alert">
-                          {{ message }}
-                      </div>
-                    {% endfor %}
-                  {% endif %}
+
                   <form method="POST">
                     {% csrf_token %}
                     <label name="service_name">Service name:</label>
@@ -38,6 +32,13 @@
                     <br>
                     <label name="service_description">Service description:</label>
                     {{ form.service_description }}
+                    {% if messages %}
+                    {% for message in messages %}
+                      <div class="alert alert-danger" role="alert">
+                          {{ message }}
+                      </div>
+                    {% endfor %}
+                  {% endif %}
                     <br>
                     <label name="service_price">Service price:</label>
                     {{ form.service_price }}
