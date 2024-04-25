@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
-from app.models import users, roles, services
-from app.forms import EditServicesForm, LoginForm
+from app.models import users, roles, Servicios
+from app.forms import *
 from django.contrib.auth import authenticate, login as auth_login, logout 
 from django.http import HttpResponse, HttpResponseNotFound
 from django.shortcuts import get_object_or_404
@@ -28,7 +28,7 @@ def quote(request):
         return render (request, 'quote.html')
 
 def service(request):
-    return render(request, 'services.html')
+    return render(request, 'Servicios.html')
 
 def about(request):
     return render(request, 'about.html')
@@ -44,7 +44,7 @@ def editservices(request):
     if request.user.is_authenticated:
         if request.method == 'GET':
             try:
-                servicios = services.objects.all()
+                servicios = Servicios.objects.all()
                 return render(request, 'EditServices.html', {'services': servicios})
             except Exception as e:
                 print(e)
@@ -61,7 +61,7 @@ def edit_service_details(request, pk):
     # Verificar si el usuario está autenticado y es un administrador
     # Verificar si el usuario está autenticado y es un administrador
     if request.user.is_authenticated:
-        servicio = get_object_or_404(services, service_id=pk)
+        servicio = get_object_or_404(Servicios, service_id=pk)
         # if request.method == 'GET':
         #     form = EditServicesForm(instance=servicio)
         if request.method == 'POST':
@@ -88,7 +88,48 @@ def edit_service_details(request, pk):
         return render(request, 'EditServiceDetails.html', {'form': form})
     else:
         return redirect('index')
-    
+
+# def input_is_clean(input_data):
+#     try:
+#         decoded_data = base64.b64decode(input_data).decode('utf-8')
+#         for keyword in ['script', 'alert']:
+#             if keyword in decoded_data.lower():
+#                 return False  # Retorna False si se encuentran palabras clave no deseadas
+#         return True  # Retorna True si los datos están limpios
+#     except (base64.binascii.Error, UnicodeDecodeError) as e:
+#         raise ValueError("Error en la decodificación de datos: " + str(e))  
+
+
+# def edit_service_details(request, pk):
+#     if request.user.is_authenticated:
+#         servicio = get_object_or_404(services, service_id=pk)
+#         if request.method == 'GET':
+#             form = EditServicesForm(instance=servicio)
+#         elif request.method == 'POST':
+#             form = EditServicesForm(request.POST, instance=servicio)
+#             if form.is_valid():
+#                 datos = form.cleaned_data
+#                 try:
+#                     if input_is_clean(datos["service_name"]) and input_is_clean(datos["service_description"]):
+#                         form.save()
+#                         return redirect('List Services')
+#                     else:
+#                         # Reasignar el formulario para que se vuelva a mostrar con los datos originales
+#                         form = EditServicesForm(instance=servicio)
+#                         messages.error(request, "Datos inválidos: contiene palabras clave no deseadas.")
+#                 except ValueError as e:
+#                     # Manejar la excepción ValueError que podría ser elevada por input_is_clean
+#                     messages.error(request, "Error en la decodificación de datos: " + str(e))
+#             # Si el formulario no es válido, se renderiza nuevamente la página con el formulario y los errores
+#         else:
+#             # Reasignar el formulario para que se vuelva a mostrar con los datos originales
+#             form = EditServicesForm(instance=servicio)
+#         return render(request, 'EditServiceDetails.html', {'form': form})
+#     else:
+#         return redirect('index')
+
+
+
 def login(request):
     if request.method == 'POST':
         form = LoginForm(request.POST)
@@ -107,3 +148,35 @@ def login(request):
 def user_logout(request):
     logout(request)
     return redirect('login')
+
+def dashboard(request):
+    if request.user.is_authenticated:
+        return render(request, 'dashboard.html')
+    else:
+        return redirect('index')
+
+def invoice_generator(request):
+    if request.user.is_authenticated:
+        servicios = Servicios.objects.all()
+        return render(request, 'InvoiceGenerator.html', {'Servicios': servicios})
+    else:
+        return redirect('index')
+    
+def test(request):
+    if request.method == 'POST':
+        form = ClientesForm(request.POST)
+        if form.is_valid():
+            # Obtener los datos del formulario
+            datos_formulario = form.cleaned_data
+            # Buscar el registro en la base de datos
+            objeto, creado = Clientes.objects.get_or_create(datos_formulario['email'], datos_formulario)  # Utiliza los datos del formulario como valores predeterminados
+            
+            # Si el objeto ya existía, actualiza los campos
+            if not creado:
+                for campo, valor in datos_formulario.items():
+                    setattr(objeto, campo, valor)
+                objeto.save()
+            return redirect('mi_urta')  # Redirigir a donde desees después de procesar el formulario
+    else:
+        form = ClientesForm()
+    return render(request, 'mi_template.html', {'form': form})

@@ -1,3 +1,4 @@
+{%  load static %}
 <!DOCTYPE html>
 <html lang="en">
 <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
@@ -23,10 +24,11 @@
             <div class="logo"><a href="/"><img src="{% static 'images/logo.png' %}"></a></div>
                         <div class="menu_text">
                 <h1>Generate Invoice</h1>
+                {% csrf_token %}
                 <td class="service">
                     <select name="selected_service" id="selected_service" name="selected_service">
                       {% for service in services %}
-                      <option value="{{ service }}">{{ service }}</option>
+                      <option value="{{ service.service_id }}">{{ service.service_name }}</option>
                       {% endfor %}
                     </select></td>
                     <td class="qty"><input type="text" name="qty" maxlength="4" size="4" placeholder="qty"></td><br>

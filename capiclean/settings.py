@@ -131,3 +131,7 @@ STATICFILES_DIRS = [
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 AUTH_USER_MODEL = 'app.users'
+
+
+# Securizar CSRF en PROD
+#CSRF_COOKIE_SECURE = literal_eval(getenv("HTTPS_ONLY", "True"))
